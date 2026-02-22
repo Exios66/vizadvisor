@@ -1,1 +1,35 @@
-{}
+{
+  "description": "Sales trend over time",
+  "input": {
+    "sessionId": "test-trend-001",
+    "dataset": {
+      "rowCount": 365,
+      "schema": [
+        { "name": "date", "type": "temporal", "cardinality": 365, "nullable": false, "range": "2024-01-01 → 2024-12-31" },
+        { "name": "revenue", "type": "quantitative", "cardinality": 365, "nullable": false, "range": "1,000 – 50,000" }
+      ],
+      "sampleRows": [
+        { "date": "2024-01-01", "revenue": "5000" },
+        { "date": "2024-01-02", "revenue": "6200" }
+      ]
+    },
+    "goal": {
+      "description": "Show monthly revenue trend over the year",
+      "category": "trend",
+      "primaryQuestion": "How has revenue changed over time?"
+    },
+    "parameters": {
+      "audience": "Business stakeholders",
+      "library": "recharts",
+      "language": "javascript",
+      "interactivity": "Tooltips only",
+      "accessibility": "WCAG AA",
+      "extraNotes": null
+    }
+  },
+  "expected": {
+    "goal_category": "trend",
+    "primary_chart_type_contains": "line",
+    "must_reference_column": "revenue"
+  }
+}

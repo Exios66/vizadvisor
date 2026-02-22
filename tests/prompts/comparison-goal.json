@@ -1,1 +1,41 @@
-{}
+{
+  "description": "Sales comparison across 5 product categories",
+  "input": {
+    "sessionId": "test-comparison-001",
+    "dataset": {
+      "rowCount": 250,
+      "schema": [
+        { "name": "category", "type": "nominal",      "cardinality": 5,   "nullable": false, "range": null },
+        { "name": "total_sales", "type": "quantitative", "cardinality": 250,  "nullable": false, "range": "1,200 – 98,000" },
+        { "name": "quarter", "type": "ordinal",      "cardinality": 4,   "nullable": false, "range": null }
+      ],
+      "sampleRows": [
+        { "category": "Electronics", "total_sales": "45200", "quarter": "Q1" },
+        { "category": "Apparel",     "total_sales": "12800", "quarter": "Q1" },
+        { "category": "Home",        "total_sales": "33100", "quarter": "Q1" }
+      ]
+    },
+    "goal": {
+      "description": "Compare total sales performance across product categories for Q1",
+      "category": "comparison",
+      "primaryQuestion": "Which category generated the most revenue?"
+    },
+    "parameters": {
+      "audience": "Business stakeholders",
+      "library": "recharts",
+      "language": "javascript",
+      "interactivity": "Tooltips only",
+      "accessibility": "WCAG AA",
+      "extraNotes": null
+    }
+  },
+  "expected": {
+    "goal_category": "comparison",
+    "confidence_not": "low",
+    "primary_chart_type_contains": "bar",
+    "must_reference_column": "total_sales",
+    "code_library": "recharts",
+    "color_blind_safe": true
+  },
+  "must_not_contain": ["pie chart", "3D", "rainbow", "jet"]
+}

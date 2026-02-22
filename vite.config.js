@@ -4,6 +4,17 @@ import path from 'path';
 
 export default defineConfig({
   plugins: [react()],
+  build: {
+    rollupOptions: {
+      output: {
+        manualChunks: {
+          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
+          'prism': ['prismjs'],
+          'papaparse': ['papaparse'],
+        },
+      },
+    },
+  },
   test: {
     globals: true,
     environment: 'jsdom',

@@ -10,6 +10,14 @@ const DEFAULT_MODEL = import.meta.env.VITE_DEFAULT_MODEL               || 'claud
 
 const RETRY_DELAYS = [0, 1000, 2000, 4000];
 
+const ERROR_MESSAGES = {
+  401: 'Invalid API key. Check your .env file and verify VITE_ANTHROPIC_API_KEY is set correctly.',
+  403: 'Access denied. Your API key may not have permission for this model.',
+  429: 'Rate limit reached. Please wait a moment and try again.',
+  500: 'The AI service encountered an error. Please try again.',
+  503: 'The AI service is temporarily unavailable. Please try again in a few moments.',
+};
+
 function buildEndpoint() {
   if (PROXY_URL) return `${PROXY_URL}/api/recommend`;
   if (PROVIDER === 'openai') return 'https://api.openai.com/v1/chat/completions';
@@ -69,7 +77,8 @@ async function attemptRequest(messages, model, attempt = 0) {
 
   if (!res.ok) {
     const text = await res.text().catch(() => '');
-    throw new Error(`API error ${res.status}: ${text.slice(0, 200)}`);
+    const msg = ERROR_MESSAGES[res.status] ?? `API error ${res.status}: ${text.slice(0, 200)}`;
+    throw new Error(msg);
   }
 
   const data = await res.json();
@@ -107,14 +116,15 @@ export async function streamRequest(sessionContext, history = [], model = DEFAUL
 
   if (!res.ok) {
     const text = await res.text().catch(() => '');
-    throw new Error(`API error ${res.status}: ${text.slice(0, 200)}`);
+    const msg = ERROR_MESSAGES[res.status] ?? `API error ${res.status}: ${text.slice(0, 200)}`;
+    throw new Error(msg);
   }
 
   const reader  = res.body.getReader();
   const decoder = new TextDecoder();
   let   raw     = '';
 
-  while (true) {
+  for (;;) {
     const { done, value } = await reader.read();
     if (done) break;
 

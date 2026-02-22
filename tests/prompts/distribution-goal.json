@@ -1,1 +1,33 @@
-{}
+{
+  "description": "Distribution of values",
+  "input": {
+    "sessionId": "test-distribution-001",
+    "dataset": {
+      "rowCount": 500,
+      "schema": [
+        { "name": "value", "type": "quantitative", "cardinality": 480, "nullable": false, "range": "0 – 100" }
+      ],
+      "sampleRows": [
+        { "value": "42" },
+        { "value": "67" }
+      ]
+    },
+    "goal": {
+      "description": "Show the distribution of values",
+      "category": "distribution",
+      "primaryQuestion": "What is the shape of the data?"
+    },
+    "parameters": {
+      "audience": "Data analysts",
+      "library": "recharts",
+      "language": "javascript",
+      "interactivity": "Tooltips only",
+      "accessibility": "Standard",
+      "extraNotes": null
+    }
+  },
+  "expected": {
+    "goal_category": "distribution",
+    "primary_chart_type_contains": "histogram"
+  }
+}

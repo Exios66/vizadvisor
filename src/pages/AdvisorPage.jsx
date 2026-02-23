@@ -1,6 +1,7 @@
 import { useSession } from '../context/SessionContext';
 import { useLLM } from '../hooks/useLLM';
 import { useDataParser } from '../hooks/useDataParser';
+import { useAnalysis } from '../hooks/useAnalysis';
 
 import DataUploader    from '../components/input/DataUploader';
 import DataPreview     from '../components/input/DataPreview';
@@ -8,11 +9,15 @@ import GoalSelector    from '../components/input/GoalSelector';
 import ParameterPanel  from '../components/input/ParameterPanel';
 import PromptBuilder   from '../components/input/PromptBuilder';
 import RecommendationList from '../components/output/RecommendationList';
+import AnalysisPanel   from '../components/analysis/AnalysisPanel';
+import AnalysisResults from '../components/analysis/AnalysisResults';
 
 export default function AdvisorPage() {
   const { state, setDataset, setDatasetError, overrideType, setGoal, setParameters, resetSession } = useSession();
   const { submit, isReady, status, recommendation, rawResponse, error } = useLLM();
   const parser = useDataParser();
+  const preAnalysis = useAnalysis('pre');
+  const postAnalysis = useAnalysis('post');
 
   const handleFile = async (file) => {
     const result = await parser.parse(file);
@@ -49,6 +54,23 @@ export default function AdvisorPage() {
             </Section>
           )}
 
+          {state.dataset?.schema && state.dataset?.rows?.length > 0 && (
+            <Section title="2.5 · Run Pre-Viz Analysis (optional)">
+              <AnalysisPanel
+                schema={state.dataset.schema}
+                rows={state.dataset.rows}
+                onRun={preAnalysis.run}
+                status={preAnalysis.status}
+                error={preAnalysis.error}
+              />
+              {preAnalysis.results && (
+                <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
+                  <AnalysisResults results={preAnalysis.results} analysisType={preAnalysis.analysisType} />
+                </div>
+              )}
+            </Section>
+          )}
+
           <Section title="3 · Define Your Goal">
             <GoalSelector goal={state.goal} onChange={setGoal} />
           </Section>
@@ -65,7 +87,7 @@ export default function AdvisorPage() {
           />
         </div>
 
-        <div className="min-h-[400px]" aria-live="polite" aria-label="Recommendation output">
+        <div className="space-y-6 min-h-[400px]" aria-live="polite" aria-label="Recommendation output">
           <RecommendationList
             status={status}
             recommendation={recommendation}
@@ -73,6 +95,23 @@ export default function AdvisorPage() {
             error={error}
             onRetry={submit}
           />
+
+          {state.dataset?.schema && state.dataset?.rows?.length > 0 && (
+            <Section title="Run Post-Viz Analysis (optional)">
+              <AnalysisPanel
+                schema={state.dataset.schema}
+                rows={state.dataset.rows}
+                onRun={postAnalysis.run}
+                status={postAnalysis.status}
+                error={postAnalysis.error}
+              />
+              {postAnalysis.results && (
+                <div className="mt-4 pt-4 border-t border-slate-200 dark:border-slate-700">
+                  <AnalysisResults results={postAnalysis.results} analysisType={postAnalysis.analysisType} />
+                </div>
+              )}
+            </Section>
+          )}
         </div>
       </div>
     </div>

@@ -3,7 +3,7 @@ import { createContext, useContext, useReducer, useCallback } from 'react';
 const initialState = {
   dataset: {
     rawFile: null, rowCount: null, schema: null,
-    sampleRows: null, parseError: null,
+    sampleRows: null, rows: null, parseError: null,
   },
   goal: { description: '', category: null, primaryQuestion: null },
   parameters: {
@@ -16,6 +16,8 @@ const initialState = {
   llmError: null,
   conversationHistory: [],
   sessionId: crypto.randomUUID(),
+  preAnalysis:  { results: null, status: 'idle', error: null, analysisType: null },
+  postAnalysis: { results: null, status: 'idle', error: null, analysisType: null },
 };
 
 function sessionReducer(state, action) {
@@ -42,6 +44,12 @@ function sessionReducer(state, action) {
       return { ...state, status: 'complete', recommendation: action.payload };
     case 'REQUEST_ERROR':
       return { ...state, status: 'error', llmError: action.payload };
+    case 'SET_PRE_ANALYSIS':
+      return { ...state, preAnalysis: { ...state.preAnalysis, ...action.payload } };
+    case 'SET_POST_ANALYSIS':
+      return { ...state, postAnalysis: { ...state.postAnalysis, ...action.payload } };
+    case 'CLEAR_ANALYSIS':
+      return { ...state, preAnalysis: initialState.preAnalysis, postAnalysis: initialState.postAnalysis };
     case 'APPEND_HISTORY':
       return { ...state, conversationHistory: [...state.conversationHistory, action.payload] };
     case 'RESET_SESSION':
@@ -58,6 +66,9 @@ export function SessionProvider({ children }) {
 
   const setDataset      = useCallback((data) => dispatch({ type: 'SET_DATASET', payload: data }), []);
   const setDatasetError = useCallback((msg)  => dispatch({ type: 'SET_DATASET_ERROR', payload: msg }), []);
+  const setPreAnalysis  = useCallback((data) => dispatch({ type: 'SET_PRE_ANALYSIS', payload: data }), []);
+  const setPostAnalysis = useCallback((data) => dispatch({ type: 'SET_POST_ANALYSIS', payload: data }), []);
+  const clearAnalysis   = useCallback(()     => dispatch({ type: 'CLEAR_ANALYSIS' }), []);
   const overrideType    = useCallback((name, type) => dispatch({ type: 'SET_SCHEMA_OVERRIDE', payload: { name, type } }), []);
   const setGoal         = useCallback((data) => dispatch({ type: 'SET_GOAL', payload: data }), []);
   const setParameters   = useCallback((data) => dispatch({ type: 'SET_PARAMETERS', payload: data }), []);
@@ -65,7 +76,7 @@ export function SessionProvider({ children }) {
   const resetSession    = useCallback(()     => dispatch({ type: 'RESET_SESSION' }), []);
 
   return (
-    <SessionContext.Provider value={{ state, dispatch, setDataset, setDatasetError, overrideType, setGoal, setParameters, appendHistory, resetSession }}>
+    <SessionContext.Provider value={{ state, dispatch, setDataset, setDatasetError, overrideType, setGoal, setParameters, setPreAnalysis, setPostAnalysis, clearAnalysis, appendHistory, resetSession }}>
       {children}
     </SessionContext.Provider>
   );

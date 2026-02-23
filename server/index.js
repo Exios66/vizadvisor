@@ -1,6 +1,7 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { runAnalysis } from './analysis/runner.js';
 
 dotenv.config();
 
@@ -10,7 +11,16 @@ const API_KEY  = process.env.ANTHROPIC_API_KEY;
 const PROVIDER = process.env.LLM_PROVIDER || 'anthropic';
 
 app.use(cors({ origin: process.env.ALLOWED_ORIGIN || 'http://localhost:5173' }));
-app.use(express.json({ limit: '1mb' }));
+app.use(express.json({ limit: '10mb' }));
+
+app.post('/api/analyze', async (req, res) => {
+  try {
+    const results = await runAnalysis(req.body);
+    res.json(results);
+  } catch (err) {
+    res.status(400).json({ error: err.message });
+  }
+});
 
 app.post('/api/recommend', async (req, res) => {
   if (!API_KEY) return res.status(500).json({ error: 'API key not configured on server' });

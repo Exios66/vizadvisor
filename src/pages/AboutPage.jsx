@@ -26,7 +26,8 @@ export default function AboutPage() {
       </Section>
 
       <Section title="Privacy">
-        <p>Your data never leaves your browser. Only the column schema, a small sample of rows (5 rows maximum), and row count are sent to the LLM API. Raw data files are never transmitted or stored.</p>
+        <p>Visualization recommendations use only column schema, a small sample of rows (5 rows maximum), and row count — sent to the LLM API. Raw data files are never transmitted for recommendations.</p>
+        <p className="mt-2">When you use the optional <strong>Run Analysis</strong> feature (pre- or post-viz), your data rows (up to 1,000) are sent to the analysis server to run R or Python scripts. The server can be self-hosted; no data is stored. For full privacy, do not use the analysis feature.</p>
       </Section>
 
       <Section title="Technology">

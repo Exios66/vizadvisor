@@ -8,11 +8,11 @@ export function useLLM() {
   const { settings } = useSettings();
 
   const submit = useCallback(async () => {
-    const { dataset, goal, parameters, sessionId, conversationHistory } = state;
+    const { dataset, goal, parameters, sessionId, conversationHistory, preAnalysis } = state;
 
     dispatch({ type: 'SUBMIT_REQUEST' });
 
-    const context = { sessionId, dataset, goal, parameters };
+    const context = { sessionId, dataset, goal, parameters, preAnalysis };
 
     try {
       if (settings.streaming) {

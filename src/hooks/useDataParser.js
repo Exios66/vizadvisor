@@ -16,7 +16,7 @@ export function useDataParser() {
     try {
       const { headers, rows, sampleRows, rowCount, warn } = await parseFile(file);
       const schema = inferSchema(headers, rows);
-      const parsed = { schema, sampleRows, rowCount };
+      const parsed = { schema, sampleRows, rowCount, rows };
       setResult(parsed);
       if (warn) setWarning(warn);
       setStatus('complete');

@@ -212,6 +212,7 @@ sessionId,
 dataset,
 goal,
 parameters,
+preAnalysis,
 } = context;
 
 // — Dataset block —
@@ -248,6 +249,13 @@ ${schemaRows}
 ${sampleBlock}
 
 -----
+
+${preAnalysis?.results && preAnalysis?.status === 'complete' && !preAnalysis.results?.error ? `## PRE-ANALYSIS RESULTS (optional context)
+
+The user ran a ${preAnalysis.analysisType ?? 'statistical'} analysis before requesting visualization. Consider these results when recommending charts:
+${JSON.stringify(preAnalysis.results, null, 2).slice(0, 1200)}
+
+-----` : ''}
 
 ## VISUALIZATION GOAL
 

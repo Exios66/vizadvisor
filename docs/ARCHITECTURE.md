@@ -34,7 +34,7 @@
 
 VizAdvisor is a client-side React application that accepts a user’s dataset (via file upload or manual schema entry) and visualization goal, then queries a large language model to produce expert-level, context-aware data visualization recommendations. The LLM response is structured as a JSON object that drives a rich output UI including chart type rationale, design decision breakdowns, accessibility guidance, alternative options, pitfall warnings, and ready-to-use code scaffolds.
 
-The application is intentionally **frontend-first**: the only backend dependency is the LLM API. This makes it trivially deployable as a static site, though a lightweight proxy server is strongly recommended for production to protect API credentials.
+The application is intentionally **frontend-first**: the primary backend dependency is the LLM API. An optional Express proxy server provides `/api/recommend` (LLM) and `/api/analyze` (R/Python statistical analysis). The proxy is strongly recommended for production to protect API credentials.
 
 -----
 
@@ -174,6 +174,12 @@ The LLM integration layer is designed around two contracts:
 **Input contract:** `llmService.sendRequest()` accepts a `{ system, messages }` object produced by `promptTemplates.buildMessages()`. It knows nothing about datasets, goals, or visualization concepts — it only knows how to make an authenticated HTTP request to the configured provider endpoint.
 
 **Output contract:** The LLM is instructed (via system prompt) to return a single JSON object conforming to the recommendation schema. `llmService.js` validates the response is parseable JSON before returning it. If it is not, the error propagates to `useLLM.js` which surfaces it in the UI.
+
+### 4.6 Analysis Service Layer
+
+**Location:** `src/services/analysisService.js`, `server/analysis/`
+
+An optional server-side analysis layer runs R or Python scripts for statistical analysis. The client sends schema + row data to `POST /api/analyze`; the server validates the request, spawns the appropriate script (R or Python), passes JSON via stdin, and returns parsed JSON stdout. Analysis types include descriptive statistics, regression, power analysis, mediation, and factorial ANOVA. Pre-visualization analysis can inform the LLM prompt; post-visualization analysis runs after recommendations. Data is sent only when the user explicitly runs analysis; it is never stored server-side.
 
 -----
 

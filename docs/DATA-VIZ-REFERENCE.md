@@ -11,6 +11,7 @@
 1. [Why This Document Exists](#1-why-this-document-exists)
 1. [The Visualization Selection Framework](#2-the-visualization-selection-framework)
 1. [Chart Type Taxonomy](#3-chart-type-taxonomy)
+
 - 3.1 [Comparison](#31-comparison)
 - 3.2 [Trend Over Time](#32-trend-over-time)
 - 3.3 [Distribution](#33-distribution)
@@ -19,6 +20,7 @@
 - 3.6 [Geospatial](#36-geospatial)
 - 3.7 [Network & Flow](#37-network--flow)
 - 3.8 [Ranking](#38-ranking)
+
 1. [Visual Encoding Principles](#4-visual-encoding-principles)
 1. [Color Design](#5-color-design)
 1. [Accessibility Standards](#6-accessibility-standards)

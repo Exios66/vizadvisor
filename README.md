@@ -1,178 +1,120 @@
-# 📊 VizAdvisor — AI-Powered Data Visualization Recommender
+# VizAdvisor — AI-Powered Data Visualization Recommender
 
-> A frontend web application that allows users to describe their dataset and visualization goals, then receives tailored, LLM-powered recommendations on the best visualization strategies, chart types, and parameters for their specific use case.
+A full-stack web application that helps users describe their dataset and visualization goals, then receives tailored, LLM-powered recommendations on the best visualization strategies, chart types, and parameters. Includes optional pre- and post-visualization statistical analysis via R or Python.
 
------
+---
 
-## 🗺️ Repository Map
+## Features
 
-```bash
+| Feature | Description |
+|---------|-------------|
+| **CSV/JSON Upload** | Drag-and-drop or paste data; automatic schema inference |
+| **Goal Selection** | Compare, trend, distribution, correlation, part-of-whole, geospatial, network, ranking |
+| **LLM Recommendations** | Structured output: chart type, rationale, design decisions, code scaffold |
+| **Pre-Viz Analysis** | Optional descriptive stats, regression, power, mediation, factorial (R or Python) |
+| **Post-Viz Analysis** | Same analysis types after receiving recommendations |
+| **Dark Mode** | Theme toggle with persistent preference |
+| **Export** | Copy or download recommendations as Markdown/JSON |
+| **Session History** | Save and load past sessions (localStorage) |
+
+---
+
+## Repository Map
+
+```
 vizadvisor/
-│
-├── README.md                          # This file — project overview & repo map
-├── .env.example                       # Environment variable template
-├── .gitignore
+├── README.md                    # This file
+├── CHANGELOG.md                 # Version history
+├── run.sh                       # One-command dev launcher (npm install + dev:full + open browser)
+├── .env.example                 # Client env template
 ├── package.json
-├── vite.config.js                     # or next.config.js if using Next.js
+├── vite.config.js
+├── index.html
+├── mermaid-map.md               # Mermaid flowchart of repo structure
+├── IMPLEMENTATION-PLAN.md       # Phased build specification
 │
 ├── public/
-│   └── favicon.svg
+│   └── vite.svg
 │
 ├── src/
+│   ├── main.jsx                 # App entry point
+│   ├── App.jsx                  # Root component, routing, theme wrapper
 │   │
-│   ├── main.jsx                       # App entry point
-│   ├── App.jsx                        # Root component + routing
+│   ├── components/
+│   │   ├── layout/              # Header, Footer, Sidebar
+│   │   ├── input/               # DataUploader, DataPreview, GoalSelector, ParameterPanel, PromptBuilder
+│   │   ├── output/              # RecommendationList, RecommendationCard, CodeSnippet, ExportButton, etc.
+│   │   ├── analysis/            # AnalysisPanel, AnalysisResults
+│   │   └── common/              # Button, Spinner, Modal, Tooltip, ErrorBanner, CopyButton, Badge
 │   │
-│   ├── assets/                        # Static assets (logos, icons, etc.)
-│   │
-│   ├── components/                    # Reusable UI components
-│   │   ├── layout/
-│   │   │   ├── Header.jsx
-│   │   │   ├── Footer.jsx
-│   │   │   └── Sidebar.jsx            # Optional: history / saved sessions
-│   │   │
-│   │   ├── input/
-│   │   │   ├── DataUploader.jsx       # CSV / JSON file upload or paste
-│   │   │   ├── DataPreview.jsx        # Table preview of uploaded data
-│   │   │   ├── GoalSelector.jsx       # Dropdown: compare, trend, distribution, etc.
-│   │   │   ├── ParameterPanel.jsx     # User-defined refinement params
-│   │   │   └── PromptBuilder.jsx      # Assembles final prompt from all inputs
-│   │   │
-│   │   ├── output/
-│   │   │   ├── RecommendationCard.jsx # Single viz recommendation block
-│   │   │   ├── RecommendationList.jsx # Renders all LLM suggestions
-│   │   │   ├── CodeSnippet.jsx        # Syntax-highlighted code example
-│   │   │   └── ExportButton.jsx       # Copy / download recommendations
-│   │   │
-│   │   └── common/
-│   │       ├── Button.jsx
-│   │       ├── Spinner.jsx
-│   │       ├── Modal.jsx
-│   │       ├── Tooltip.jsx
-│   │       └── ErrorBanner.jsx
-│   │
-│   ├── pages/                         # Top-level route pages
-│   │   ├── HomePage.jsx               # Landing / intro
-│   │   ├── AdvisorPage.jsx            # Main tool: input + output side-by-side
-│   │   └── AboutPage.jsx              # What this tool does, how it works
-│   │
-│   ├── hooks/                         # Custom React hooks
-│   │   ├── useLLM.js                  # Handles API call to LLM, streaming, errors
-│   │   ├── useDataParser.js           # Parses CSV/JSON, infers column types
-│   │   └── useSessionHistory.js       # Saves/loads past sessions (localStorage)
-│   │
-│   ├── services/                      # API & data layer
-│   │   ├── llmService.js              # Sends prompt to LLM API (Anthropic/OpenAI/etc.)
-│   │   ├── dataService.js             # Data parsing, schema inference utilities
-│   │   └── promptTemplates.js         # System prompt + user prompt construction logic
-│   │
-│   ├── context/                       # Global state via React Context
-│   │   ├── SessionContext.jsx         # Current session data, recommendations
-│   │   └── SettingsContext.jsx        # User preferences (model, verbosity, etc.)
-│   │
-│   ├── utils/                         # Pure utility functions
-│   │   ├── columnTypeInferrer.js      # Detect numeric, categorical, datetime columns
-│   │   ├── chartTypeMapper.js         # Maps goal + data types → candidate chart types
-│   │   └── formatters.js             # Format numbers, dates for display
-│   │
-│   └── styles/                        # Global and component styles
-│       ├── global.css
-│       └── theme.js                   # Design tokens (colors, spacing, fonts)
+│   ├── pages/                   # HomePage, AdvisorPage, AboutPage
+│   ├── hooks/                   # useLLM, useDataParser, useSessionHistory, useAnalysis
+│   ├── services/                # llmService, dataService, promptTemplates, analysisService
+│   ├── context/                 # SessionContext, SettingsContext
+│   ├── utils/                   # columnTypeInferrer, chartTypeMapper, formatters, responseValidator
+│   └── styles/                  # global.css, theme.js
+│
+├── server/                      # Express API proxy + analysis runner
+│   ├── index.js                 # /api/recommend (LLM), /api/analyze (R/Python)
+│   ├── .env.example
+│   ├── requirements.txt         # Python analysis deps
+│   └── analysis/
+│       ├── runner.js            # Spawns R/Python scripts, validates input
+│       ├── README.md
+│       ├── r/                   # descriptive.R, regression.R, power.R, mediation.R, factorial.R
+│       └── python/              # descriptive.py, regression.py, power.py, mediation.py, factorial.py
 │
 ├── tests/
-│   ├── unit/
-│   │   ├── columnTypeInferrer.test.js
-│   │   ├── chartTypeMapper.test.js
-│   │   └── promptTemplates.test.js
-│   └── integration/
-│       └── AdvisorFlow.test.jsx
+│   ├── unit/                    # columnTypeInferrer, chartTypeMapper, promptTemplates, responseValidator
+│   ├── integration/             # AdvisorFlow
+│   └── prompts/                 # Golden-path JSON fixtures
 │
 └── docs/
-    ├── ARCHITECTURE.md                # System design decisions
-    ├── PROMPT_DESIGN.md               # How prompts are constructed & why
-    └── CONTRIBUTING.md
+    ├── ARCHITECTURE.md          # System design, layers, data flow
+    ├── PROMPT-DESIGN.md         # Prompt construction, output schema
+    ├── DATA-VIZ-REFERENCE.md    # Chart taxonomy, encoding principles
+    ├── CONTRIBUTING.md          # Contribution guidelines
+    ├── STRUCTURE.md             # Directory structure reference
+    └── ROUTES.md                # Routes and sitemap
 ```
 
------
+---
 
-## 🧠 Core Concept & Data Flow
+## Core Data Flow
 
 ```
 User Input
     │
-    ├─ [1] Upload or paste dataset (CSV / JSON / manual description)
-    ├─ [2] Select visualization goal
-    │       (e.g., Compare categories, Show trend over time,
-    │              Show distribution, Explore correlation, Part-of-whole)
-    ├─ [3] Set optional parameters
-    │       (audience, interactivity level, chart library preference,
-    │        accessibility needs, color theme, data volume)
+    ├─ [1] Upload or paste dataset (CSV / JSON)
+    ├─ [2] (Optional) Run pre-viz analysis (descriptive, regression, etc.)
+    ├─ [3] Select visualization goal
+    ├─ [4] Set parameters (audience, library, interactivity, accessibility)
     │
     ▼
-PromptBuilder.jsx
-    │  Assembles structured prompt:
-    │  - System prompt (expert data viz consultant persona)
-    │  - Data schema + sample rows
-    │  - Goal + parameters
+PromptBuilder → promptTemplates.buildMessages()
     │
     ▼
-llmService.js → LLM API (Anthropic Claude / OpenAI / etc.)
+llmService → POST /api/recommend (proxy) → Anthropic / OpenAI
     │
     ▼
-RecommendationList.jsx
-    │  Renders structured LLM response:
-    │  - Top chart type picks with rationale
-    │  - Key design parameters (axes, color encoding, etc.)
-    │  - Library-specific code snippet
-    │  - Warnings or caveats (e.g., overplotting risk)
+RecommendationList (RecommendationCard, AlternativeOptions, DesignDecisionsPanel,
+                   PitfallWarnings, CodeSnippet, FollowUpQuestions, ExportButton)
     │
     ▼
-ExportButton.jsx → Copy to clipboard / Download as .md or .json
+(Optional) Run post-viz analysis
 ```
 
------
+---
 
-## ⚙️ Key Features to Implement
+## Getting Started
 
-|Feature                   |Component(s)                         |Status|
-|--------------------------|-------------------------------------|------|
-|CSV/JSON upload + preview |`DataUploader`, `DataPreview`        |🔲 TODO|
-|Auto column type inference|`useDataParser`, `columnTypeInferrer`|🔲 TODO|
-|Goal selector UI          |`GoalSelector`                       |🔲 TODO|
-|Refinement parameter panel|`ParameterPanel`                     |🔲 TODO|
-|Prompt assembly & LLM call|`PromptBuilder`, `llmService`        |🔲 TODO|
-|Streaming response display|`RecommendationList`, `useLLM`       |🔲 TODO|
-|Code snippet output       |`CodeSnippet`                        |🔲 TODO|
-|Session history (local)   |`useSessionHistory`                  |🔲 TODO|
-|Model/settings toggle     |`SettingsContext`                    |🔲 TODO|
-|Export recommendations    |`ExportButton`                       |🔲 TODO|
+### Prerequisites
 
------
+- **Node.js** 18+
+- **npm** or yarn
+- **(Optional)** R and Python 3 for analysis features
 
-## 🔧 Environment Variables
-
-```bash
-# .env.example
-
-# LLM Provider (choose one)
-VITE_LLM_PROVIDER=anthropic           # anthropic | openai | custom
-
-# API Keys (set in your own .env — never commit!)
-VITE_ANTHROPIC_API_KEY=your_key_here
-VITE_OPENAI_API_KEY=your_key_here
-
-# Model Selection
-VITE_DEFAULT_MODEL=claude-sonnet-4-6  # or gpt-4o, etc.
-
-# Optional: proxy backend URL (if routing API calls through your own server)
-VITE_API_PROXY_URL=
-```
-
-> ⚠️ **Note:** For production, route API calls through a backend proxy so API keys are never exposed client-side.
-
------
-
-## 🚀 Getting Started
+### Quick Start
 
 ```bash
 # Clone the repo
@@ -182,60 +124,170 @@ cd vizadvisor
 # Install dependencies
 npm install
 
-# Copy env template and fill in your API key
+# Copy env and add your API key
 cp .env.example .env
+# Edit .env: set VITE_ANTHROPIC_API_KEY or VITE_OPENAI_API_KEY
 
-# Start dev server
+# Option A: Frontend only (API key in client — dev only, not recommended)
 npm run dev
+
+# Option B: Full stack (recommended — API key on server)
+cp server/.env.example server/.env
+# Edit server/.env: set ANTHROPIC_API_KEY
+npm run dev:full
+# Opens http://localhost:5173
 ```
 
------
+### One-Command Launch
 
-## 📐 Prompt Design Philosophy
+```bash
+./run.sh
+```
 
-The system prompt should position the LLM as a senior data visualization consultant. Key elements:
+Installs dependencies, starts Vite dev server + API proxy, waits for readiness, and opens `http://localhost:5173/advisor` in the default browser. On macOS this uses `open`; on Linux use `xdg-open` or run manually after the server starts.
 
-1. **Role framing** — expert in data viz best practices (Tufte, Munzner, etc.)
-1. **Data context** — column names, inferred types, row count, sample data
-1. **Goal specification** — what the user wants to communicate
-1. **Constraint parameters** — audience, tooling, interactivity, accessibility
-1. **Output format** — structured JSON or markdown with sections:
-- Primary recommendation + rationale
-- Alternative options
-- Key design decisions (encoding, scale, color)
-- Code scaffold (in user’s preferred library)
-- Pitfalls to avoid
+### Production Build
 
-See `docs/PROMPT_DESIGN.md` for full templates.
+```bash
+npm run build
+npm run preview
+```
 
------
+For production, run the Express server separately and serve the built assets (or use a reverse proxy). Set `VITE_API_PROXY_URL` to your production API URL.
 
-## 🗂️ Visualization Goals Supported
+---
 
-- **Comparison** — bar, grouped bar, dot plot, radar
-- **Trend over time** — line, area, candlestick, streamgraph
-- **Distribution** — histogram, violin, box plot, beeswarm
-- **Correlation** — scatter, bubble, heatmap, parallel coordinates
-- **Part-of-whole** — pie, donut, treemap, sunburst, waffle
-- **Geospatial** — choropleth, dot map, flow map
-- **Network/Flow** — Sankey, chord, force-directed graph
-- **Ranking** — slope chart, bump chart, lollipop
+## Environment Variables
 
------
+### Client (`.env`)
 
-## 📚 Tech Stack (Recommended)
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `VITE_LLM_PROVIDER` | `anthropic` or `openai` | `anthropic` |
+| `VITE_ANTHROPIC_API_KEY` | Anthropic API key | — |
+| `VITE_OPENAI_API_KEY` | OpenAI API key | — |
+| `VITE_DEFAULT_MODEL` | Model name | `claude-sonnet-4-6` |
+| `VITE_API_PROXY_URL` | Proxy URL for LLM + analysis | — (use `http://localhost:3001` with `dev:full`) |
+| `VITE_ANALYSIS_TIMEOUT_MS` | Analysis request timeout | `60000` |
+| `VITE_MAX_TOKENS` | LLM max tokens | `2048` |
+| `VITE_REQUEST_TIMEOUT_MS` | LLM request timeout | `30000` |
+| `VITE_APP_ENV` | App environment | `development` |
+| `VITE_REPO_URL` | GitHub repo link in header | — |
 
-|Layer            |Choice                  |Notes                             |
-|-----------------|------------------------|----------------------------------|
-|Framework        |React + Vite            |Fast, modern, minimal config      |
-|Styling          |Tailwind CSS            |Utility-first, easy theming       |
-|State            |React Context + hooks   |Lightweight; add Zustand if needed|
-|LLM API          |Anthropic Claude        |Via `@anthropic-ai/sdk`           |
-|Data parsing     |PapaParse               |CSV; native JSON.parse for JSON   |
-|Code highlighting|Prism.js or Shiki       |Syntax highlight code snippets    |
-|Routing          |React Router v6         |Simple page routing               |
-|Testing          |Vitest + Testing Library|Unit + integration                |
+### Server (`server/.env`)
 
------
+| Variable | Description | Default |
+|----------|-------------|---------|
+| `ANTHROPIC_API_KEY` | Anthropic API key (server-side) | — |
+| `LLM_PROVIDER` | `anthropic` or `openai` | `anthropic` |
+| `PORT` | Server port | `3001` |
+| `ALLOWED_ORIGIN` | CORS origin | `http://localhost:5173` |
+| `ANALYSIS_TIMEOUT_MS` | Analysis script timeout | `60000` |
+| `R_PATH` | Path to Rscript | `Rscript` |
+| `PYTHON_PATH` | Path to python3 | `python3` |
 
-*Last updated: February 2026 — scaffold version 1.0*
+> **Production:** Route all API calls through the proxy so API keys are never exposed client-side. Set `VITE_API_PROXY_URL` and keep keys only in `server/.env`.
+
+---
+
+## Analysis Service (Optional)
+
+The server runs R or Python scripts for statistical analysis. Data stays in the browser; only schema and rows are sent to the server.
+
+### R Setup
+
+```r
+install.packages(c("jsonlite", "dplyr", "tidyr", "broom", "car", "pwr", "lavaan"), repos="https://cloud.r-project.org")
+```
+
+### Python Setup
+
+```bash
+pip install -r server/requirements.txt
+```
+
+### Analysis Types
+
+| Type | Description |
+|------|-------------|
+| **Descriptive** | Summary stats, optional group-by |
+| **Regression** | Linear regression / ANOVA |
+| **Power** | Power analysis (u, v, f², power) |
+| **Mediation** | X → M → Y mediation |
+| **Factorial** | Factorial ANOVA (2–3 factors) |
+
+---
+
+## Tech Stack
+
+| Layer | Choice |
+|-------|--------|
+| Framework | React 18 + Vite 6 |
+| Styling | Tailwind CSS |
+| State | React Context + useReducer |
+| Routing | React Router v6 |
+| LLM | Anthropic Claude / OpenAI (via proxy) |
+| Data parsing | PapaParse |
+| Code highlighting | Prism.js |
+| Testing | Vitest, Testing Library |
+
+---
+
+## Routes
+
+| Path | Description |
+|------|-------------|
+| `/` | Landing page |
+| `/advisor` | Main tool — upload data, set goal, get recommendations |
+| `/about` | What the tool does, data handling |
+
+**API endpoints:** `POST /api/recommend` (LLM proxy), `POST /api/analyze` (R/Python analysis)
+
+---
+
+## Documentation
+
+- [ARCHITECTURE.md](docs/ARCHITECTURE.md) — System design, layers, data flow
+- [PROMPT-DESIGN.md](docs/PROMPT-DESIGN.md) — Prompt construction, output schema
+- [DATA-VIZ-REFERENCE.md](docs/DATA-VIZ-REFERENCE.md) — Chart taxonomy, encoding principles
+- [STRUCTURE.md](docs/STRUCTURE.md) — Directory structure
+- [ROUTES.md](docs/ROUTES.md) — Routes and sitemap
+- [CONTRIBUTING.md](docs/CONTRIBUTING.md) — Contribution guidelines
+- [CHANGELOG.md](CHANGELOG.md) — Version history
+
+---
+
+## Testing
+
+```bash
+npm test              # Run tests
+npm run test:watch    # Watch mode
+npm run test:ui       # Vitest UI
+npm run test:coverage # Coverage report
+npm run test:prompts  # Golden-path prompt fixtures
+```
+
+---
+
+## Scripts
+
+| Script | Description |
+|--------|-------------|
+| `npm run dev` | Vite dev server only |
+| `npm run dev:full` | Vite + Express proxy (concurrent) |
+| `npm run server` | Express proxy only |
+| `npm run build` | Production build |
+| `npm run preview` | Preview production build |
+| `npm run lint` | ESLint |
+| `npm run lint:fix` | ESLint with auto-fix |
+| `npm run format` | Prettier format |
+
+---
+
+## License
+
+Private project. See repository for details.
+
+---
+
+*Last updated: February 2026*

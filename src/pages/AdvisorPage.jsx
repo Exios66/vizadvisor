@@ -23,8 +23,8 @@ export default function AdvisorPage() {
   return (
     <div className="max-w-7xl mx-auto px-4 sm:px-6 py-8">
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-slate-100">Data Visualization Advisor</h1>
-        <p className="text-slate-400 mt-1">Upload your dataset, describe your goal, and receive expert visualization recommendations powered by AI.</p>
+        <h1 className="text-3xl font-bold text-slate-900 dark:text-slate-100">Data Visualization Advisor</h1>
+        <p className="text-slate-600 dark:text-slate-400 mt-1">Upload your dataset, describe your goal, and receive expert visualization recommendations powered by AI.</p>
       </div>
 
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
@@ -81,8 +81,8 @@ export default function AdvisorPage() {
 
 function Section({ title, children }) {
   return (
-    <div className="rounded-xl border border-slate-700 bg-slate-900 p-5 space-y-4">
-      <h2 className="text-sm font-semibold text-slate-300 uppercase tracking-wide">{title}</h2>
+    <div className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5 space-y-4">
+      <h2 className="text-sm font-semibold text-slate-600 dark:text-slate-300 uppercase tracking-wide">{title}</h2>
       {children}
     </div>
   );

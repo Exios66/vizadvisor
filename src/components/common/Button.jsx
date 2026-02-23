@@ -9,14 +9,14 @@ export default function Button({
   className = '',
   ...props
 }) {
-  const base = 'inline-flex items-center justify-center font-medium rounded-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed';
+  const base = 'inline-flex items-center justify-center font-medium rounded-lg transition-all focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-indigo-500 focus-visible:ring-offset-2 focus-visible:ring-offset-white dark:focus-visible:ring-offset-slate-900 disabled:opacity-50 disabled:cursor-not-allowed';
 
   const variants = {
     primary:   'bg-indigo-600 hover:bg-indigo-500 text-white shadow-sm',
-    secondary: 'bg-slate-700 hover:bg-slate-600 text-slate-100 border border-slate-600',
-    ghost:     'hover:bg-slate-800 text-slate-300 hover:text-slate-100',
+    secondary: 'bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 text-slate-800 dark:text-slate-100 border border-slate-300 dark:border-slate-600',
+    ghost:     'hover:bg-slate-200 dark:hover:bg-slate-800 text-slate-600 dark:text-slate-300 hover:text-slate-900 dark:hover:text-slate-100',
     danger:    'bg-red-600 hover:bg-red-500 text-white',
-    outline:   'border border-indigo-500 text-indigo-400 hover:bg-indigo-500/10',
+    outline:   'border border-indigo-500 text-indigo-600 dark:text-indigo-400 hover:bg-indigo-500/10',
   };
 
   const sizes = {

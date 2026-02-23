@@ -26,7 +26,7 @@ export default function CodeSnippet({ codeScaffold }) {
   return (
     <div className="space-y-2">
       <div className="flex items-center justify-between">
-        <h3 className="font-semibold text-slate-200">Code Scaffold</h3>
+        <h3 className="font-semibold text-slate-800 dark:text-slate-200">Code Scaffold</h3>
         <div className="flex items-center gap-2">
           <Badge variant="brand">{codeScaffold.library}</Badge>
           <Badge variant="default">{codeScaffold.language}</Badge>
@@ -34,10 +34,10 @@ export default function CodeSnippet({ codeScaffold }) {
         </div>
       </div>
       {codeScaffold.notes && (
-        <p className="text-xs text-slate-400 italic bg-slate-800/60 rounded px-3 py-2">{codeScaffold.notes}</p>
+        <p className="text-xs text-slate-600 dark:text-slate-400 italic bg-slate-100 dark:bg-slate-800/60 rounded px-3 py-2">{codeScaffold.notes}</p>
       )}
-      <div className="relative rounded-xl overflow-hidden border border-slate-700">
-        <pre className="overflow-x-auto text-sm p-5 bg-slate-900 m-0">
+      <div className="relative rounded-xl overflow-hidden border border-slate-200 dark:border-slate-700">
+        <pre className="overflow-x-auto text-sm p-5 bg-slate-100 dark:bg-slate-900 m-0">
           <code ref={ref} className={`language-${lang}`}>
             {codeScaffold.snippet}
           </code>

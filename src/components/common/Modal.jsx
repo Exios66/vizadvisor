@@ -29,9 +29,9 @@ export default function Modal({ isOpen, onClose, title, children, size = 'md' })
         onClick={onClose}
         aria-hidden="true"
       />
-      <div className={`relative w-full ${sizes[size]} bg-slate-900 border border-slate-700 rounded-xl shadow-2xl`}>
-        <div className="flex items-center justify-between p-5 border-b border-slate-700">
-          <h2 id="modal-title" className="text-lg font-semibold text-slate-100">{title}</h2>
+      <div className={`relative w-full ${sizes[size]} bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-700 rounded-xl shadow-2xl`}>
+        <div className="flex items-center justify-between p-5 border-b border-slate-200 dark:border-slate-700">
+          <h2 id="modal-title" className="text-lg font-semibold text-slate-900 dark:text-slate-100">{title}</h2>
           <Button variant="ghost" size="sm" onClick={onClose} aria-label="Close modal">✕</Button>
         </div>
         <div className="p-5">{children}</div>

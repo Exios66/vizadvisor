@@ -22,7 +22,7 @@ export default function Tooltip({ children, content, position = 'top' }) {
       {visible && content && (
         <div
           role="tooltip"
-          className={`absolute z-50 px-2 py-1 text-xs text-white bg-slate-900 border border-slate-700 rounded shadow-lg whitespace-nowrap pointer-events-none ${positions[position]}`}
+          className={`absolute z-50 px-2 py-1 text-xs text-white bg-slate-800 dark:bg-slate-900 border border-slate-600 dark:border-slate-700 rounded shadow-lg whitespace-nowrap pointer-events-none ${positions[position]}`}
         >
           {content}
         </div>

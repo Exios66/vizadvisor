@@ -6,8 +6,8 @@ export default function PromptBuilder({ isReady, status, onSubmit, onReset }) {
   const hasResult = status === 'complete' || status === 'error';
 
   return (
-    <div className="flex items-center justify-between pt-2 border-t border-slate-700">
-      <div className="text-xs text-slate-500">
+    <div className="flex items-center justify-between pt-2 border-t border-slate-200 dark:border-slate-700">
+      <div className="text-xs text-slate-500 dark:text-slate-500">
         {!isReady && 'Upload data and describe your goal to continue'}
         {isReady  && status === 'idle' && '✓ Ready to analyze'}
         {isLoading && '⏳ Generating…'}

@@ -9,12 +9,12 @@ export default function ParameterPanel({ parameters, onChange }) {
     <div className="space-y-4">
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
         <div>
-          <label htmlFor="audience" className="block text-sm font-medium text-slate-300 mb-1.5">Audience</label>
+          <label htmlFor="audience" className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1.5">Audience</label>
           <select
             id="audience"
             value={parameters.audience ?? ''}
             onChange={(e) => onChange({ audience: e.target.value || null })}
-            className="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 text-slate-800 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >
             <option value="">Not specified</option>
             {AUDIENCE_OPTIONS.map((a) => <option key={a} value={a}>{a}</option>)}
@@ -22,7 +22,7 @@ export default function ParameterPanel({ parameters, onChange }) {
         </div>
 
         <div>
-          <label htmlFor="library" className="block text-sm font-medium text-slate-300 mb-1.5">Chart Library</label>
+          <label htmlFor="library" className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1.5">Chart Library</label>
           <select
             id="library"
             value={parameters.library ?? ''}
@@ -30,7 +30,7 @@ export default function ParameterPanel({ parameters, onChange }) {
               const lib = SUPPORTED_LIBRARIES.find((l) => l.value === e.target.value);
               onChange({ library: e.target.value || null, language: lib?.language ?? parameters.language });
             }}
-            className="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 text-slate-800 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >
             <option value="">No preference</option>
             {SUPPORTED_LIBRARIES.map(({ value, label }) => (
@@ -40,12 +40,12 @@ export default function ParameterPanel({ parameters, onChange }) {
         </div>
 
         <div>
-          <label htmlFor="interactivity" className="block text-sm font-medium text-slate-300 mb-1.5">Interactivity</label>
+          <label htmlFor="interactivity" className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1.5">Interactivity</label>
           <select
             id="interactivity"
             value={parameters.interactivity ?? ''}
             onChange={(e) => onChange({ interactivity: e.target.value || null })}
-            className="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 text-slate-800 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >
             <option value="">Not specified</option>
             {INTERACTIVITY_OPTIONS.map((o) => <option key={o} value={o}>{o}</option>)}
@@ -53,12 +53,12 @@ export default function ParameterPanel({ parameters, onChange }) {
         </div>
 
         <div>
-          <label htmlFor="accessibility" className="block text-sm font-medium text-slate-300 mb-1.5">Accessibility</label>
+          <label htmlFor="accessibility" className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1.5">Accessibility</label>
           <select
             id="accessibility"
             value={parameters.accessibility ?? ''}
             onChange={(e) => onChange({ accessibility: e.target.value || null })}
-            className="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
+            className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 text-slate-800 dark:text-slate-200 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500"
           >
             <option value="">Standard</option>
             {ACCESSIBILITY_OPTIONS.map((o) => <option key={o} value={o}>{o}</option>)}
@@ -67,7 +67,7 @@ export default function ParameterPanel({ parameters, onChange }) {
       </div>
 
       <div>
-        <label htmlFor="extra-notes" className="block text-sm font-medium text-slate-300 mb-1.5">
+        <label htmlFor="extra-notes" className="block text-sm font-medium text-slate-600 dark:text-slate-300 mb-1.5">
           Additional context
           <span className="text-slate-500 ml-1 font-normal">(optional)</span>
         </label>
@@ -77,7 +77,7 @@ export default function ParameterPanel({ parameters, onChange }) {
           onChange={(e) => onChange({ extraNotes: e.target.value || null })}
           placeholder="e.g. This will be embedded in a dark-mode dashboard. Prefer minimal annotations."
           rows={2}
-          className="w-full bg-slate-800 border border-slate-600 rounded-lg px-3 py-2 text-slate-200 text-sm placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-y"
+          className="w-full bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-600 rounded-lg px-3 py-2 text-slate-800 dark:text-slate-200 text-sm placeholder-slate-400 dark:placeholder-slate-500 focus:outline-none focus:ring-2 focus:ring-indigo-500 resize-y"
         />
       </div>
     </div>

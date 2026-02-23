@@ -15,11 +15,11 @@ export default function HomePage() {
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-16 space-y-20">
       <div className="text-center space-y-6">
         <div className="text-6xl" aria-hidden="true">📊</div>
-        <h1 className="text-4xl sm:text-5xl font-bold text-slate-100 leading-tight">
+        <h1 className="text-4xl sm:text-5xl font-bold text-slate-900 dark:text-slate-100 leading-tight">
           Expert visualization advice,<br />
-          <span className="text-indigo-400">powered by AI</span>
+          <span className="text-indigo-500 dark:text-indigo-400">powered by AI</span>
         </h1>
-        <p className="text-lg text-slate-400 max-w-2xl mx-auto">
+        <p className="text-lg text-slate-600 dark:text-slate-400 max-w-2xl mx-auto">
           Upload your data, describe your communication goal, and receive recommendations grounded in Tufte, Munzner, and Cairo — with code scaffolds ready to run.
         </p>
         <Link to="/advisor">
@@ -29,10 +29,10 @@ export default function HomePage() {
 
       <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-5">
         {FEATURES.map(({ icon, title, desc }) => (
-          <div key={title} className="rounded-xl border border-slate-700 bg-slate-900 p-5 space-y-2 hover:border-indigo-500/40 transition-colors">
+          <div key={title} className="rounded-xl border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 p-5 space-y-2 hover:border-indigo-500/40 transition-colors">
             <div className="text-2xl" aria-hidden="true">{icon}</div>
-            <h3 className="font-semibold text-slate-200">{title}</h3>
-            <p className="text-sm text-slate-400 leading-relaxed">{desc}</p>
+            <h3 className="font-semibold text-slate-800 dark:text-slate-200">{title}</h3>
+            <p className="text-sm text-slate-600 dark:text-slate-400 leading-relaxed">{desc}</p>
           </div>
         ))}
       </div>

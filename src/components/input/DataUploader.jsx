@@ -42,7 +42,7 @@ export default function DataUploader({ onFileParsed, parseStatus, parseError, pa
         className={`relative border-2 border-dashed rounded-xl p-8 text-center cursor-pointer transition-all ${
           dragging
             ? 'border-indigo-400 bg-indigo-500/10'
-            : 'border-slate-600 hover:border-slate-500 bg-slate-800/50'
+            : 'border-slate-300 dark:border-slate-600 hover:border-slate-400 dark:hover:border-slate-500 bg-slate-100 dark:bg-slate-800/50'
         }`}
       >
         <input
@@ -59,13 +59,13 @@ export default function DataUploader({ onFileParsed, parseStatus, parseError, pa
           </div>
           {fileName ? (
             <div>
-              <p className="font-medium text-slate-200">{fileName}</p>
-              <p className="text-sm text-slate-400">{formatFileSize(fileSize)}</p>
+              <p className="font-medium text-slate-800 dark:text-slate-200">{fileName}</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">{formatFileSize(fileSize)}</p>
             </div>
           ) : (
             <div>
-              <p className="font-medium text-slate-300">Drop your file here</p>
-              <p className="text-sm text-slate-400">CSV or JSON • Up to 20 MB</p>
+              <p className="font-medium text-slate-700 dark:text-slate-300">Drop your file here</p>
+              <p className="text-sm text-slate-600 dark:text-slate-400">CSV or JSON • Up to 20 MB</p>
             </div>
           )}
           {parseStatus === 'parsing' && (

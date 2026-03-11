@@ -1,4 +1,4 @@
-# VizAdvisor — A Subject Matter Expert Framework Data Visualization Consultant
+# VizAdvisor — A Subject Matter Expert (SME) Data Visualization Consultant
 
 A full-stack web application that helps users describe their dataset and visualization goals, then receives tailored, LLM-powered recommendations on the best visualization strategies, chart types, and parameters. Includes optional pre- and post-visualization statistical analysis via R or Python.
 

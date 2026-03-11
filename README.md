@@ -1,4 +1,4 @@
-# VizAdvisor — AI-Powered Data Visualization Recommender
+# VizAdvisor — A Subject Matter Expert Framework Data Visualization Consultant
 
 A full-stack web application that helps users describe their dataset and visualization goals, then receives tailored, LLM-powered recommendations on the best visualization strategies, chart types, and parameters. Includes optional pre- and post-visualization statistical analysis via R or Python.
 
@@ -21,7 +21,7 @@ A full-stack web application that helps users describe their dataset and visuali
 
 ## Repository Map
 
-```
+```bash
 vizadvisor/
 ├── README.md                    # This file
 ├── CHANGELOG.md                 # Version history
@@ -289,4 +289,4 @@ Personal development project. See repository for details.
 
 ---
 
-*Last updated: March 2026*
+*Last updated: March 9, 2026*

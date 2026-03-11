@@ -286,8 +286,8 @@ npm run test:prompts  # Golden-path prompt fixtures
 
 ## License
 
-Private project. See repository for details.
+Personal development project. See repository for details.
 
 ---
 
-*Last updated: February 2026*
+*Last updated: March 2026*

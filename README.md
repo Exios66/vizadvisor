@@ -31,7 +31,6 @@ vizadvisor/
 ├── vite.config.js
 ├── index.html
 ├── mermaid-map.md               # Mermaid flowchart of repo structure
-├── IMPLEMENTATION-PLAN.md       # Phased build specification
 │
 ├── public/
 │   └── vite.svg
